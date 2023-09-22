@@ -23,8 +23,8 @@ import { BlobOptions } from "buffer";
     }
 
     public async checkEmail(email: string): Promise<boolean>{
-         return await new Promise((resolve,reject) => {
-            this.connection.query('SELECT * FROM avioschedule.users WHERE email = ?', [email],  function(err,result){
+         return await new Promise(async (resolve,reject) => {
+            await this.connection.query('SELECT * FROM avioschedule.users WHERE email = ?', [email],  function(err,result){
                 if(err) throw err;
                 if(result.length > 0){
                     resolve(true);

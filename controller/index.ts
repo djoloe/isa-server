@@ -5,6 +5,10 @@ import { RegisterService } from '../service/registerService';
 import { LoginService } from '../service/loginService';
 import { FilterFlightsService } from '../service/filterFlightService';
 import { FilterAvio } from '../service/filterAvioService';
+import { ChooseSeatService } from '../service/chooseSeatService';
+import { CheckSeatsService } from '../service/checkSeatsService';
+import { RemoveReservationService } from '../service/removeReservationService';
+import { type } from 'os';
 
 
 const app: Express = express();
@@ -12,6 +16,9 @@ const staticRegister = new RegisterService();
 const staticLogin = new LoginService();
 const filterFlight = new FilterFlightsService();
 const filterAvio = new FilterAvio();
+const chooseSeats = new ChooseSeatService();
+const checkSeats = new CheckSeatsService();
+const removeReservation = new RemoveReservationService();
 
 app.use(bodyParser.json())
 app.use(express.json())
@@ -49,6 +56,21 @@ app.post('/searchFlights', async function(req,res,next){
 app.post('/companyInfo', async function(req,res,next){
     const avioInfo = await filterAvio.passIdDBAvio(req.body);
     res.send(avioInfo);
+})
+
+app.post('/seat', async function(req,res,next) {
+    const saved = await chooseSeats.parseSeats(req.body);
+    res.send(saved);
+})
+
+app.post('/loadSeatsFlight', async function(req,res,next) {
+    const divs = await checkSeats.checkFlightDivDB(req.body.idFlight);
+    res.send(divs);
+})
+
+app.post('/removeReservation', async function (req,res,next) {
+    const isDeleted = await removeReservation.passID(req.body.idUser);
+    res.send(isDeleted);
 })
 
 const port = 3000;
