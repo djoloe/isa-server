@@ -1,26 +1,23 @@
 import mysql from 'mysql';
 import dotenv from 'dotenv';
-dotenv.config({path: './.env'});
+dotenv.config({ path: '/.env' });
 
-export class ConnectionDB{
-    
-    public constructor() {
-        
-    }
+export class ConnectionDB {
+  public constructor() {}
 
-    public openConnection(){
-        let connection  = mysql.createConnection({
-            host: process.env.DATABASE_HOST,
-            user: process.env.DATABASE_USER,
-            password: process.env.DATABASE_PASSWORD,
-            port: Number(process.env.DATABASE_PORT),
-            multipleStatements: false
-        });
-        
-        connection.connect((err) => {
-            if(err) throw err;
-            console.log('connected');
-        })
-        return connection;
-    }
+  public openConnection() {
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: 'root1234',
+      port: 3306,
+      multipleStatements: false,
+    });
+
+    connection.connect((err) => {
+      if (err) throw err;
+      console.log('connected');
+    });
+    return connection;
+  }
 }
