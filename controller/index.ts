@@ -20,10 +20,12 @@ const register = require('./routes/userRoute');
 const avio = require('./routes/avioRoute');
 const seat = require('./routes/seatRoute');
 const friends = require('./routes/friendsRoute');
+const token = require('./routes/tokenRoute');
 app.use('/', register);
 app.use('/', avio);
 app.use('', seat);
 app.use('/', friends);
+app.use('/', token);
 
 const port = 3000;
 app.listen(port, () => {

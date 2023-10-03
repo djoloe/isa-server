@@ -1,8 +1,12 @@
 /* eslint-disable prefer-const */
 import { UserRepository } from '../repository/userRepository';
+import { TokenService } from './tokenService';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+dotenv.config({ path: '/.env' });
 
 export class UserService {
+  private tokenServiceObj = new TokenService();
   private readonly saltRounds = 3;
   private userRepoObj = new UserRepository();
 
@@ -15,7 +19,8 @@ export class UserService {
         bcrypt.compare(password, String(objectBase.passwordBase), (err, result) => {
           if (err) throw err;
           if (result) {
-            resolve(objectBase.idBase);
+            const tokenService = this.tokenServiceObj.createToken(email, objectBase.passwordBase, objectBase.idBase);
+            resolve(tokenService);
           } else {
             resolve(false);
           }

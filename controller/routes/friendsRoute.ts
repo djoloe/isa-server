@@ -17,4 +17,5 @@ router.post('/checkUserFriends', async function (req, res) {
   const haveFriends = await friendsServiceObj.checkUserFriends(req.body.idUser);
   res.send(haveFriends);
 });
+
 module.exports = router;
