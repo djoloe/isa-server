@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import express from 'express';
 import { UserService } from '../../service/userService';
+import { MailSender } from '../../service/mailService';
 const userServiceObj = new UserService();
 
 const router = express.Router();

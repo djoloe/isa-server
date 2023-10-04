@@ -19,13 +19,18 @@ export class TokenService {
     return token;
   }
 
-  public checkToken(tokenWeb: any): any {
-    try {
-      jwt.verify(tokenWeb, process.env.JWT_SECRET as string, function (err: any, res: any) {
-        if (err) throw err;
-      });
-    } catch (error) {
-      return false;
-    }
+  public checkToken(tokenWeb: any): Promise<any> {
+    return new Promise((response) => {
+      try {
+        jwt.verify(tokenWeb, process.env.JWT_SECRET as string, function (err: any, decoded: any) {
+          if (err) throw err;
+          if (decoded) {
+            response(decoded);
+          }
+        });
+      } catch (error) {
+        response(false);
+      }
+    });
   }
 }

@@ -1,14 +1,13 @@
 import { ConnectionDB } from './connectionDB';
 export class FriendRepository {
-  idUser!: number;
   connection = new ConnectionDB().openConnection();
   public constructor() {}
 
-  public saveFriend(firstName: string, lastName: string, dateBirth: string, contact: string) {
+  public saveFriend(firstName: string, lastName: string, dateBirth: string, contact: string, idUser: number) {
     return new Promise((resolve) => {
       this.connection.query(
         'INSERT INTO avioschedule.friends (firstName, lastName, dateBirth, contact, idUser) VALUES (?,?,?,?,?)',
-        [firstName, lastName, dateBirth, contact, this.idUser],
+        [firstName, lastName, dateBirth, contact, idUser],
         function (err, result) {
           if (err) throw err;
           if (result) {
@@ -41,9 +40,5 @@ export class FriendRepository {
         }
       });
     });
-  }
-
-  public setUser(idUser: number) {
-    this.idUser = Number(idUser);
   }
 }
