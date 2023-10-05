@@ -19,7 +19,7 @@ export class UserService {
         bcrypt.compare(password, String(objectBase.passwordBase), (err, result) => {
           if (err) throw err;
           if (result) {
-            const tokenService = this.tokenServiceObj.createToken(email, objectBase.passwordBase, objectBase.idBase);
+            const tokenService = this.tokenServiceObj.createToken(objectBase.idBase, objectBase.role);
             resolve(tokenService);
           } else {
             resolve(false);

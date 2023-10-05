@@ -9,33 +9,39 @@ dotenv.config({ path: './.env' });
 const tokenServiceObj = new TokenService();
 const friendServiceObj = new FriendService();
 const router = express.Router();
-let currentToken: any;
+let idUser: any;
 
 router.post('/checkToken', async function (req, res) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  const checkedToken = await tokenServiceObj.checkToken(token);
-  if (checkedToken === false) {
-    res.sendStatus(203);
-  } else {
-    currentToken = checkedToken;
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    const checkedTokenInfo = await tokenServiceObj.checkToken(token);
+    if (checkedTokenInfo === false) {
+      res.sendStatus(203);
+    } else if (checkedTokenInfo.role === 'Admin') {
+      res.sendStatus(204);
+      idUser = checkedTokenInfo.idUser;
+    } else {
+      idUser = checkedTokenInfo.idUser;
+    }
+  } catch (error) {
+    console.log(error);
   }
 });
 
 router.get('/verify/:token', (req) => {
-  const { token } = req.params;
-
-  jwt.verify(token, process.env.TOKEN_VERIFICATION as string, function (err, decoded: any) {
-    try {
+  try {
+    const { token } = req.params;
+    jwt.verify(token, process.env.TOKEN_VERIFICATION as string, function (err, decoded: any) {
       if (err) throw err;
       if (decoded) {
         console.log('successful!');
-        friendServiceObj.acceptedFriends(decoded.data, currentToken.idUser);
+        friendServiceObj.acceptedFriends(decoded.data, idUser);
       }
-    } catch (error) {
-      console.log('token expired!');
-    }
-  });
+    });
+  } catch (error) {
+    console.log('token expired!');
+  }
 });
 
 module.exports = router;

@@ -6,12 +6,11 @@ dotenv.config({ path: './.env' });
 export class TokenService {
   public constructor() {}
 
-  public createToken(email: string, password: string, idUser: number) {
+  public createToken(idUser: number, role: string) {
     const token = jwt.sign(
       {
-        email: email,
-        password: password,
         idUser: idUser,
+        role: role,
       },
       process.env.JWT_SECRET as string,
       { expiresIn: '2h' }
@@ -25,7 +24,11 @@ export class TokenService {
         jwt.verify(tokenWeb, process.env.JWT_SECRET as string, function (err: any, decoded: any) {
           if (err) throw err;
           if (decoded) {
-            response(decoded);
+            const data = {
+              role: decoded.role,
+              idUser: decoded.idUser,
+            };
+            response(data);
           }
         });
       } catch (error) {

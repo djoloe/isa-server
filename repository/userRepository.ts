@@ -9,6 +9,7 @@ export class UserRepository {
     const passwordObject = {
       idBase: Number,
       passwordBase: String,
+      role: String,
     };
     return await new Promise((resolve) => {
       this.connection.query('SELECT * FROM avioschedule.users WHERE email = ?;', [email], function (err, result) {
@@ -16,6 +17,7 @@ export class UserRepository {
         if (result.length > 0) {
           passwordObject.idBase = result[0].idusers;
           passwordObject.passwordBase = result[0].password;
+          passwordObject.role = result[0].role;
           resolve(passwordObject);
         } else {
           resolve(false);
@@ -26,11 +28,15 @@ export class UserRepository {
 
   public saveUser(paramsOfUser: object, password: string) {
     const paramsInput = JSON.parse(JSON.stringify(paramsOfUser));
-    const sql = 'INSERT INTO avioschedule.users (email, firstName, lastName, password, adress) VALUES (?,?,?,?,?)';
-    this.connection.query(sql, [paramsInput.email, paramsInput.firstname, paramsInput.lastname, password, paramsInput.adress], function (err) {
-      if (err) throw err;
-      console.log('record inserted');
-    });
+    const sql = 'INSERT INTO avioschedule.users (email, firstName, lastName, password, adress, role) VALUES (?,?,?,?,?,?)';
+    this.connection.query(
+      sql,
+      [paramsInput.email, paramsInput.firstname, paramsInput.lastname, password, paramsInput.adress, paramsInput.role],
+      function (err) {
+        if (err) throw err;
+        console.log('record inserted');
+      }
+    );
   }
 
   public async checkEmail(email: string): Promise<boolean> {
