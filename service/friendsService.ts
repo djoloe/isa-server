@@ -11,9 +11,9 @@ export class FriendService {
 
   public constructor() {}
 
-  public async parseFriends(data: object, token: any) {
+  public async parseFriends(data: object, headers: any) {
     const friends = JSON.parse(JSON.stringify(data));
-    const tokenBase = this.tokenService.decodeToken(token);
+    const tokenBase = this.tokenService.decodeToken(headers);
     for (const friend of friends.array) {
       new MailSender(friend.firstName, friend.lastName, friend.contact, friend.date, (tokenBase as JwtPayload).idUser);
     }

@@ -5,9 +5,7 @@ const router = express.Router();
 const friendsServiceObj = new FriendService();
 
 router.post('/friends', function (req, res) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  friendsServiceObj.parseFriends(req.body, token);
+  friendsServiceObj.parseFriends(req.body, req.headers);
   res.sendStatus(200);
 });
 

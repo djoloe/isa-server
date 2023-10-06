@@ -38,7 +38,9 @@ export class TokenService {
     });
   }
 
-  public decodeToken(token: any) {
+  public decodeToken(headers: any) {
+    const authHeader = headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
     return jwt.decode(token);
   }
 }

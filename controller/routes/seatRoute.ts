@@ -5,19 +5,17 @@ const router = express.Router();
 const seatService = new SeatService();
 
 router.post('/seat', async function (req, res) {
-  const saved = await seatService.parseSeats(req.body);
+  const saved = await seatService.parseSeats(req.body, req.headers);
   res.send(saved);
 });
 
 router.post('/loadSeatsFlight', async function (req, res) {
-  const divs = await seatService.checkFlightDivDB(req.body.idFlight);
-  res.send(divs);
+  const divsToken = await seatService.checkFlightDivDB(req.body.idFlight, req.headers);
+  res.send(divsToken);
 });
 
 router.post('/removeReservation', async function (req, res) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  const isDeleted = seatService.passToken(token);
+  const isDeleted = seatService.passToken(req.headers);
   res.send(isDeleted);
 });
 
