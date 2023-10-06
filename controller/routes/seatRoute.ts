@@ -15,7 +15,9 @@ router.post('/loadSeatsFlight', async function (req, res) {
 });
 
 router.post('/removeReservation', async function (req, res) {
-  const isDeleted = await seatService.passID(req.body.idUser);
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  const isDeleted = seatService.passToken(token);
   res.send(isDeleted);
 });
 
