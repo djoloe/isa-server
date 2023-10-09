@@ -10,7 +10,7 @@ export class SeatRepository {
     return await new Promise((resolve) => {
       const flightsArray: Array<string> = [];
       const sql = 'SELECT * FROM avioschedule.seats WHERE idFlight = ? ';
-      this.connection.query(sql, [[idFlight]], function (err, result) {
+      this.connection.query(sql, [idFlight], function (err, result) {
         if (err) throw err;
         if (result) {
           for (let i = 0; i < result.length; i++) {

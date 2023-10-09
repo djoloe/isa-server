@@ -9,6 +9,7 @@ dotenv.config({ path: './.env' });
 const tokenServiceObj = new TokenService();
 const friendServiceObj = new FriendService();
 const router = express.Router();
+
 router.post('/checkToken', async function (req, res) {
   try {
     const authHeader = req.headers['authorization'];
