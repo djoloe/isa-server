@@ -5,6 +5,13 @@ dotenv.config({ path: './.env' });
 
 export class MailSender {
   public constructor(firstName: string, lastName: string, email: string, date: Date, idUser: number) {
+    const transporter = this.createTransporter();
+    const token = this.defineToken(firstName, lastName, email, date, idUser);
+    const mailOptions = this.createMailOption(firstName, lastName, token);
+    this.sentMail(transporter, mailOptions);
+  }
+
+  public createTransporter() {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       secure: true,
@@ -16,7 +23,10 @@ export class MailSender {
         rejectUnauthorized: false,
       },
     });
+    return transporter;
+  }
 
+  public defineToken(firstName: string, lastName: string, email: string, date: Date, idUser: number) {
     const token = jwt.sign(
       {
         data: {
@@ -30,7 +40,10 @@ export class MailSender {
       process.env.TOKEN_VERIFICATION as string,
       { expiresIn: '20m' }
     );
+    return token;
+  }
 
+  public createMailOption(firstName: string, lastName: string, token: any) {
     const mailOptions = {
       from: `${firstName + ' ' + lastName} <${firstName}@gmail.com>`,
       to: 'djordjetestnikolic@gmail.com',
@@ -41,8 +54,11 @@ export class MailSender {
            http://localhost:3000/verify/${token}  
            Thanks`,
     };
+    return mailOptions;
+  }
 
-    transporter.sendMail(mailOptions, function (error, info) {
+  public sentMail(transporter: any, mailOptions: any) {
+    transporter.sendMail(mailOptions, function (error: any, info: any) {
       if (error) {
         console.log(error);
       } else {

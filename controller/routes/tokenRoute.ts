@@ -9,7 +9,6 @@ dotenv.config({ path: './.env' });
 const tokenServiceObj = new TokenService();
 const friendServiceObj = new FriendService();
 const router = express.Router();
-let idUser: any;
 
 router.post('/checkToken', async function (req, res) {
   try {
@@ -20,23 +19,23 @@ router.post('/checkToken', async function (req, res) {
       res.sendStatus(203);
     } else if (checkedTokenInfo.role === 'Admin') {
       res.sendStatus(204);
-      idUser = checkedTokenInfo.idUser;
     } else {
-      idUser = checkedTokenInfo.idUser;
+      res.sendStatus(205);
     }
   } catch (error) {
-    console.log(error);
+    return false;
   }
 });
 
-router.get('/verify/:token', (req) => {
+router.get('/verify/:token', (req, res) => {
   try {
     const { token } = req.params;
     jwt.verify(token, process.env.TOKEN_VERIFICATION as string, function (err, decoded: any) {
       if (err) throw err;
       if (decoded) {
         console.log('successful!');
-        friendServiceObj.acceptedFriends(decoded.data, idUser);
+        res.send('<script>alert("confirmed!");window.close();</script >');
+        friendServiceObj.acceptedFriends(decoded.data);
       }
     });
   } catch (error) {

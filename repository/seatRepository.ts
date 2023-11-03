@@ -9,7 +9,7 @@ export class SeatRepository {
   public async checkSeats(idFlight: number) {
     return await new Promise((resolve) => {
       const flightsArray: Array<string> = [];
-      const sql = 'SELECT * FROM avioschedule.seats WHERE idFlight = ?';
+      const sql = 'SELECT * FROM avioschedule.seats WHERE idFlight = ? ';
       this.connection.query(sql, [idFlight], function (err, result) {
         if (err) throw err;
         if (result) {
@@ -17,6 +17,7 @@ export class SeatRepository {
             flightsArray.push(result[i]);
             resolve(flightsArray);
           }
+          resolve(flightsArray);
         }
       });
     });

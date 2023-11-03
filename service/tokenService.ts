@@ -21,13 +21,14 @@ export class TokenService {
   public checkToken(tokenWeb: any): Promise<any> {
     return new Promise((response) => {
       try {
-        jwt.verify(tokenWeb, process.env.JWT_SECRET as string, function (err: any, decoded: any) {
+        jwt.verify(tokenWeb, process.env.JWT_SECRET as string, (err: any, decoded: any) => {
           if (err) throw err;
           if (decoded) {
             const data = {
               role: decoded.role,
               idUser: decoded.idUser,
             };
+
             response(data);
           }
         });
@@ -35,5 +36,11 @@ export class TokenService {
         response(false);
       }
     });
+  }
+
+  public decodeToken(headers: any) {
+    const authHeader = headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    return jwt.decode(token);
   }
 }

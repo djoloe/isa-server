@@ -5,7 +5,7 @@ const router = express.Router();
 const friendsServiceObj = new FriendService();
 
 router.post('/friends', function (req, res) {
-  friendsServiceObj.parseFriends(req.body);
+  friendsServiceObj.parseFriends(req.body, req.headers);
   res.sendStatus(200);
 });
 
